@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.enitity.Person;
 import com.example.demo.service.PersonService;
-import com.example.demo.validation.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,12 +11,10 @@ import java.util.List;
 public class PersonController {
 
     private final PersonService personService;
-    private final PersonValidator personValidator;
 
     @Autowired
-    public PersonController(PersonService personService, PersonValidator personValidator) {
+    public PersonController(PersonService personService) {
         this.personService = personService;
-        this.personValidator = personValidator;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/person")
@@ -32,7 +29,6 @@ public class PersonController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/person")
     public Person createPerson(@RequestBody Person person) {
-        personValidator.validatePerson(person);
         return personService.createPerson(person);
     }
 
