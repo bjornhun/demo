@@ -1,0 +1,49 @@
+package com.example.demo.controller;
+
+import com.example.demo.enitity.Person;
+import com.example.demo.service.PersonService;
+import com.example.demo.validation.PersonValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+public class PersonController {
+
+    private final PersonService personService;
+    private final PersonValidator personValidator;
+
+    @Autowired
+    public PersonController(PersonService personService, PersonValidator personValidator) {
+        this.personService = personService;
+        this.personValidator = personValidator;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/person")
+    public List<Person> findAll() {
+        return personService.findAll();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/person/{id}")
+    public Person findById(@PathVariable Long id) {
+        return personService.findById(id);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/person")
+    public Person createPerson(@RequestBody Person person) {
+        personValidator.validatePerson(person);
+        return personService.createPerson(person);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/person/{id}")
+    public Person updatePerson(@RequestBody Person person, @PathVariable Long id) {
+        return personService.updatePerson(person, id);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/person/{id}")
+    public String deletePerson(@PathVariable Long id) {
+        return personService.deletePerson(id);
+    }
+
+}
